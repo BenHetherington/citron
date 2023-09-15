@@ -4307,7 +4307,7 @@ void ReportTable(struct lemon *lemp){
   fprintf(out, "    // Error capturing\n\n");
 
   fprintf(out, "    typealias CitronErrorCaptureDelegate = _%sCitronErrorCaptureDelegate\n\n", className);
-  fprintf(out, "    weak var errorCaptureDelegate: CitronErrorCaptureDelegate? = nil\n\n");
+  fprintf(out, "    weak var errorCaptureDelegate: (any CitronErrorCaptureDelegate)? = nil\n\n");
   int num_of_states_with_error_capturing = 0;
   if (lemp->has_error_capture) {
     fprintf(out, "    let yyErrorCaptureSymbolNumbersForState: [CitronStateNumber:[CitronSymbolNumber]] = [");
