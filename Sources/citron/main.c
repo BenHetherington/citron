@@ -3826,7 +3826,7 @@ void ReportTable(struct lemon *lemp){
 
   fprintf(out, "// Parser class\n\n");
   const char *className = lemp->className ? lemp->className : "Parser";
-  fprintf(out, "class %s: CitronParser {\n\n", className);
+  fprintf(out, "final class %s: CitronParser {\n\n", className);
 
   // Types
 
