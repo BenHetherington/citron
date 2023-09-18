@@ -4447,7 +4447,7 @@ void ReportTable(struct lemon *lemp){
     }
     fprintf(out, "\n    ]\n\n");
 
-    fprintf(out, "    func yyShouldSaveErrorForCapturing(error: Error) -> Bool {\n");
+    fprintf(out, "    func yyShouldSaveErrorForCapturing(error: any Error) -> Bool {\n");
     fprintf(out, "        guard let delegate = errorCaptureDelegate else {\n");
     fprintf(out, "            print(\"Error capture: Not saving error for capturing because errorCaptureDelegate is not set\")\n");
     fprintf(out, "            return false\n");
@@ -4455,7 +4455,7 @@ void ReportTable(struct lemon *lemp){
     fprintf(out, "        return delegate.shouldSaveErrorForCapturing(error: error)\n");
     fprintf(out, "    }\n\n");
 
-    fprintf(out, "    func yyCaptureError(on symbolCode: CitronNonTerminalCode, error: Error, state: CitronErrorCaptureState) -> CitronSymbol? {\n");
+    fprintf(out, "    func yyCaptureError(on symbolCode: CitronNonTerminalCode, error: any Error, state: CitronErrorCaptureState) -> CitronSymbol? {\n");
     fprintf(out, "        guard let delegate = errorCaptureDelegate else {\n");
     fprintf(out, "            print(\"Error capture: Not capturing error because errorCaptureDelegate is not set\")\n");
     fprintf(out, "            return nil\n");
@@ -4493,11 +4493,11 @@ void ReportTable(struct lemon *lemp){
     fprintf(out, "    let yyErrorCaptureEndBeforeTokens: Set<CitronSymbolNumber> = []\n\n");
     fprintf(out, "    let yyErrorCaptureEndAfterSequenceEndingTokens: Set<CitronSymbolNumber> = []\n\n");
 
-    fprintf(out, "    func yyShouldSaveErrorForCapturing(error: Error) -> Bool {\n");
+    fprintf(out, "    func yyShouldSaveErrorForCapturing(error: any Error) -> Bool {\n");
     fprintf(out, "        fatalError(\"This parser was not generated with error capturing information\")\n");
     fprintf(out, "    }\n\n");
 
-    fprintf(out, "    func yyCaptureError(on symbolCode: CitronNonTerminalCode, error: Error, state: CitronErrorCaptureState) -> CitronSymbol? {\n");
+    fprintf(out, "    func yyCaptureError(on symbolCode: CitronNonTerminalCode, error: any Error, state: CitronErrorCaptureState) -> CitronSymbol? {\n");
     fprintf(out, "        fatalError(\"This parser was not generated with error capturing information\")\n");
     fprintf(out, "    }\n\n");
   }
@@ -4523,7 +4523,7 @@ void ReportTable(struct lemon *lemp){
   fprintf(out, "    func yySymbolContent(_ symbol: CitronSymbol) -> Any { return symbol.typeErasedContent() }\n\n");
   fprintf(out, "    let yyStartSymbolNumber: CitronSymbolNumber = %d\n", start_symbol->index);
   fprintf(out, "    let yyEndStateNumber: CitronStateNumber = %d\n\n", end_state_index);
-  fprintf(out, "    var yyErrorCaptureSavedError: (error: Error, isLexerError: Bool)? = nil\n");
+  fprintf(out, "    var yyErrorCaptureSavedError: (error: any Error, isLexerError: Bool)? = nil\n");
   fprintf(out, "    var yyErrorCaptureTokensSinceError: [(token: CitronToken, tokenCode: CitronTokenCode)] = []\n");
   fprintf(out, "    var yyErrorCaptureStackIndices: [Int] = []\n");
   fprintf(out, "    var yyErrorCaptureStartSymbolStackIndex: Int? = nil\n\n");
@@ -4532,7 +4532,7 @@ void ReportTable(struct lemon *lemp){
   fprintf(out, "}\n\n"); // Closing class Parser
 
   fprintf(out, "protocol _%sCitronErrorCaptureDelegate : AnyObject {\n", className);
-  fprintf(out, "    func shouldSaveErrorForCapturing(error: Error) -> Bool\n");
+  fprintf(out, "    func shouldSaveErrorForCapturing(error: any Error) -> Bool\n");
   for(int i=0; i<lemp->nsymbol; i++){
     struct symbol *sp = lemp->symbols[i];
     if (sp->error_capture_line == 0) {
@@ -4541,12 +4541,12 @@ void ReportTable(struct lemon *lemp){
     fprintf(out, "\n    /* %s */\n", sp->name);
     fprintf(out, "    func shouldCaptureErrorOn%c%s(", TOUPPER(sp->name[0]), sp->name + 1);
     fprintf(out, "state: %s.CitronErrorCaptureState,\n", className);
-    fprintf(out, "        error: Error)");
+    fprintf(out, "        error: any Error)");
     fprintf(out, " -> CitronErrorCaptureResponse<%s>\n", type_string_of_symbol(sp, lemp));
   }
   fprintf(out, "}\n\n");
   fprintf(out, "extension _%sCitronErrorCaptureDelegate {\n", className);
-  fprintf(out, "    func shouldSaveErrorForCapturing(error: Error) -> Bool {\n");
+  fprintf(out, "    func shouldSaveErrorForCapturing(error: any Error) -> Bool {\n");
   fprintf(out, "        return true\n");
   fprintf(out, "    }\n");
   fprintf(out, "}\n\n");
